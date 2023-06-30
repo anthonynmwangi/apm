@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { IProduct } from "./product";
 
-
 @Component({ // decorator
   selector: 'pm-products',
   templateUrl: './product-list.component.html',
@@ -9,6 +8,7 @@ import { IProduct } from "./product";
 })
 
 export class ProductListComponent implements OnInit{ 
+
   // Declaire all your properties
   pageTitle: string = "Product List";
   imageWidth: number = 50;
@@ -17,7 +17,7 @@ export class ProductListComponent implements OnInit{
 
 
   // Setter and Getter for listFilter
-  private _listFilter: string = '';
+  public _listFilter: string = '';
   get listFilter():string{
     return this._listFilter;
   }
@@ -25,7 +25,7 @@ export class ProductListComponent implements OnInit{
     this._listFilter = value;
     console.log("In setter: ", value);
     this.filteredProducts = this.performFilter(value);
-
+    console.log(this.filteredProducts);
   }
 
   filteredProducts: IProduct[] = [];
@@ -89,14 +89,21 @@ export class ProductListComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this._listFilter = 'carts';
-    // console.log('In OnInit ', this._listFilter);
+    this._listFilter = 'cart';
+    this.filteredProducts = this.performFilter(this._listFilter);
+    console.log('In OnInit ', this._listFilter);
+    console.log(this.filteredProducts);
+    
   }
 
   performFilter(filterBy:string): IProduct[]{
-    filterBy = filterBy.toLowerCase();
-    return this.products.filter((product:IProduct) => product.productName.toLowerCase().includes(filterBy) )
+    filterBy = filterBy.toLocaleLowerCase();
+    return this.products.filter((product:IProduct) => product.productName.toLocaleLowerCase().includes(filterBy) )
+  }
 
+  onRatingClicked(message:string):void{
+    this.pageTitle = 'Product List '+ message;
+    console.log(message);
   }
 
 }
